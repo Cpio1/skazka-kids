@@ -1,0 +1,189 @@
+@import "tailwindcss";
+
+/* Сайт всегда светлый: вариант `dark:` никогда не срабатывает */
+@custom-variant dark (&:where(.never-dark, .never-dark *));
+
+@theme {
+  --font-sans: var(--font-nunito), "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-comfortaa), var(--font-nunito), "Segoe UI", system-ui, sans-serif;
+
+  /* Палитра «Сказка сад» */
+  --color-cream: #fff9ed;
+  --color-milk: #fffdf7;
+  --color-sun: #ffe68a;
+  --color-sun-soft: #fff4c7;
+  --color-sun-deep: #8a5d00;
+  --color-peach: #ffc6a8;
+  --color-peach-soft: #ffeadf;
+  --color-peach-deep: #b34a1f;
+  --color-sky: #a9e4f5;
+  --color-sky-soft: #e3f6fc;
+  --color-sky-deep: #0b6f8c;
+  --color-mint: #bdebcb;
+  --color-mint-soft: #e6f8eb;
+  --color-mint-deep: #1d7a43;
+  --color-lavender: #d9c7fa;
+  --color-lavender-soft: #f1eafe;
+  --color-lavender-deep: #6345b8;
+  --color-pink: #ffd2e2;
+  --color-pink-soft: #ffeef4;
+  --color-pink-deep: #b8325f;
+  --color-berry: #d0446f;
+  --color-berry-hover: #b93660;
+  --color-ink: #334155;
+  --color-ink-soft: #5b6779;
+  --color-line: #f0e4cf;
+  --color-wa: #1a8f4c;
+  --color-wa-hover: #157a40;
+
+  --shadow-soft: 0 1px 2px rgb(51 65 85 / 0.05), 0 10px 26px -12px rgb(51 65 85 / 0.2);
+  --shadow-lift: 0 2px 6px rgb(51 65 85 / 0.07), 0 24px 40px -18px rgb(51 65 85 / 0.3);
+
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-float-slow: float 9s ease-in-out infinite;
+  --animate-drift: drift 26s ease-in-out infinite alternate;
+  --animate-sway: sway 5s ease-in-out infinite;
+  --animate-twinkle: twinkle 3.2s ease-in-out infinite;
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+  @keyframes drift {
+    from {
+      transform: translateX(-14px);
+    }
+    to {
+      transform: translateX(18px);
+    }
+  }
+  @keyframes sway {
+    0%,
+    100% {
+      transform: rotate(-6deg);
+    }
+    50% {
+      transform: rotate(6deg);
+    }
+  }
+  @keyframes twinkle {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(0.78);
+      opacity: 0.65;
+    }
+  }
+}
+
+/* ---------- База ---------- */
+
+:root {
+  color-scheme: only light;
+  --header-h: 64px;
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --header-h: 76px;
+  }
+}
+
+html {
+  color-scheme: only light;
+  background: var(--color-cream);
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  overflow-x: clip;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Якорь секции оказывается точно под фиксированной шапкой */
+section[id] {
+  scroll-margin-top: var(--header-h);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+::selection {
+  background: var(--color-sun);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-lavender-deep);
+  outline-offset: 3px;
+  border-radius: 10px;
+}
+
+/* Поля и элементы формы не темнеют в тёмной теме устройства */
+input,
+textarea,
+select,
+button {
+  color-scheme: only light;
+}
+
+/* Пока применяется сохранённый казахский язык — скрываем русский текст, чтобы не мигал */
+html.lang-pending body {
+  opacity: 0;
+}
+
+/* ---------- Появление при прокрутке ---------- */
+
+html.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+html.js [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- Мягкие движения ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  html.js [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}
