@@ -122,6 +122,8 @@ export const ru = {
     prev: "Предыдущее фото",
     next: "Следующее фото",
     dialogLabel: "Просмотр фотографии",
+    showAll: "Показать все фото",
+    showLess: "Свернуть",
     photos: {
       facade: "Фасад здания детского сада",
       playground: "Детская площадка",

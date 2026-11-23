@@ -6,6 +6,8 @@ type SectionHeadingProps = {
   /** Цвет «ярлычка» над заголовком */
   tone?: "sun" | "peach" | "sky" | "mint" | "lavender" | "pink";
   align?: "center" | "left";
+  /** Более компактный заголовок (для галереи) */
+  compact?: boolean;
 };
 
 const toneClasses: Record<NonNullable<SectionHeadingProps["tone"]>, string> = {
@@ -17,7 +19,7 @@ const toneClasses: Record<NonNullable<SectionHeadingProps["tone"]>, string> = {
   pink: "bg-pink-soft text-pink-deep ring-pink",
 };
 
-export function SectionHeading({ id, eyebrow, title, subtitle, tone = "sun", align = "center" }: SectionHeadingProps) {
+export function SectionHeading({ id, eyebrow, title, subtitle, tone = "sun", align = "center", compact = false }: SectionHeadingProps) {
   const centered = align === "center";
   return (
     <div className={`relative ${centered ? "mx-auto max-w-2xl text-center" : "max-w-2xl"}`} data-reveal>
@@ -31,11 +33,16 @@ export function SectionHeading({ id, eyebrow, title, subtitle, tone = "sun", ali
           {eyebrow}
         </span>
       )}
-      <h2 id={`${id}-title`} className="text-[1.75rem] leading-tight font-bold text-ink sm:text-[2.1rem] lg:text-[2.2rem]">
+      <h2
+        id={`${id}-title`}
+        className={`leading-tight font-bold text-ink ${compact ? "text-[1.6rem] sm:text-[1.9rem] lg:text-[2rem]" : "text-[1.75rem] sm:text-[2.1rem] lg:text-[2.2rem]"}`}
+      >
         {title}
       </h2>
       {subtitle && (
-        <p className={`mt-2.5 text-base leading-relaxed text-ink-soft sm:text-[1.05rem] ${centered ? "mx-auto max-w-xl" : ""}`}>
+        <p
+          className={`text-ink-soft ${compact ? "mt-1.5 text-[0.95rem] leading-snug sm:text-base" : "mt-2.5 text-base leading-relaxed sm:text-[1.05rem]"} ${centered ? "mx-auto max-w-xl" : ""}`}
+        >
           {subtitle}
         </p>
       )}

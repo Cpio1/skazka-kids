@@ -2,12 +2,12 @@
 
 import { asset } from "@/lib/paths";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight, Expand, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Expand, Images, X } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { gallery } from "@/data/site";
 import { useLanguage } from "@/i18n/LanguageProvider";
 import { SectionHeading } from "../ui/SectionHeading";
-import { Balloon, Cloud, Flower, Sparkle, Wave } from "../decor/Shapes";
+import { Cloud, Flower, Sparkle, Wave } from "../decor/Shapes";
 
 const frameColors = ["ring-sun", "ring-pink", "ring-sky", "ring-mint", "ring-lavender", "ring-peach"];
 
@@ -160,26 +160,39 @@ export function Gallery() {
     setOpenIndex(i);
   }, []);
 
+  const [expanded, setExpanded] = useState(false);
+
+  // Сначала показываем часть фото, чтобы сетка помещалась в экран:
+  // телефон и планшет — 6 (2 или 3 ряда), desktop — 8 (2 ряда по 4).
+  const hiddenClass = (i: number) => (expanded ? "" : i >= 8 ? "hidden" : i >= 6 ? "hidden lg:block" : "");
+
+  const toggle = () => {
+    if (expanded) {
+      const section = document.getElementById("gallery");
+      if (section && section.getBoundingClientRect().top < 0) section.scrollIntoView({ behavior: "smooth" });
+    }
+    setExpanded((v) => !v);
+  };
+
   return (
     <section
       id="gallery"
       aria-labelledby="gallery-title"
-      className="relative overflow-hidden bg-[linear-gradient(180deg,#e3f6fc_0%,#f3fbfe_100%)] pt-14 pb-14 sm:pt-16 sm:pb-16 lg:pt-14 lg:pb-16"
+      className="relative overflow-hidden bg-[linear-gradient(180deg,#e3f6fc_0%,#f3fbfe_100%)] pt-12 pb-10 sm:pt-14 sm:pb-12 lg:pt-12 lg:pb-10"
     >
-      <Wave className="absolute inset-x-0 -top-px h-8 w-full sm:h-12" color="#fff9ed" flip />
+      <Wave className="absolute inset-x-0 -top-px h-6 w-full sm:h-9" color="#fff9ed" flip />
       <div aria-hidden className="pointer-events-none absolute inset-0">
-        <Cloud className="absolute top-[7%] right-[6%] w-20 animate-drift sm:w-24" />
-        <Balloon className="absolute top-[10%] left-[5%] hidden w-8 animate-float md:block" color="#FFC6A8" />
-        <Flower className="absolute bottom-[4%] left-[3%] hidden w-9 animate-sway lg:block" color="#FFD2E2" />
-        <Sparkle className="absolute top-[18%] left-[26%] w-3 animate-twinkle" color="#FFC94D" />
+        <Cloud className="absolute top-[9%] right-[5%] w-12 animate-drift sm:w-16" />
+        <Flower className="absolute bottom-[5%] left-[3%] hidden w-6 animate-sway lg:block" color="#FFD2E2" />
+        <Sparkle className="absolute top-[12%] left-[8%] w-2.5 animate-twinkle" color="#FFC94D" />
       </div>
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionHeading id="gallery" title={g.title} subtitle={g.subtitle} tone="sky" />
+        <SectionHeading id="gallery" title={g.title} subtitle={g.subtitle} tone="sky" compact />
 
-        <ul className="mt-7 columns-2 gap-3 sm:gap-4 md:columns-3 lg:mt-8 xl:columns-4">
+        <ul id="gallery-grid" className="gallery-grid mx-auto mt-5 grid grid-cols-2 gap-2.5 sm:gap-3 md:grid-cols-3 lg:mt-6 lg:grid-cols-4">
           {gallery.map((photo, i) => (
-            <li key={photo.key} className="mb-3 break-inside-avoid sm:mb-4" data-reveal style={{ "--reveal-delay": `${(i % 4) * 60}ms` } as React.CSSProperties}>
+            <li key={photo.key} className={hiddenClass(i)}>
               <button
                 ref={(el) => {
                   triggerRefs.current[i] = el;
@@ -187,29 +200,41 @@ export function Gallery() {
                 type="button"
                 onClick={() => change(i)}
                 aria-label={`${g.open}: ${g.photos[photo.key]}`}
-                className={`group relative block w-full overflow-hidden rounded-[22px] bg-white p-1.5 shadow-soft ring-2 transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-lift sm:rounded-[26px] ${frameColors[i % frameColors.length]}`}
+                className={`group relative block w-full overflow-hidden rounded-[18px] bg-white p-1 shadow-soft ring-2 transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 hover:shadow-lift sm:rounded-[22px] sm:p-1.5 ${frameColors[i % frameColors.length]}`}
               >
-                <span
-                  className="relative block overflow-hidden rounded-[17px] sm:rounded-[20px]"
-                  // Очень вытянутые фото в превью ограничиваем пропорцией 3:4; целиком они видны в просмотре
-                  style={{ aspectRatio: `${photo.width} / ${Math.min(photo.height, Math.round((photo.width * 4) / 3))}` }}
-                >
+                {/* Единый квадратный формат превью; целиком фото видно в просмотре */}
+                <span className="relative block aspect-square overflow-hidden rounded-[14px] sm:rounded-[17px]">
                   <Image
                     src={asset(photo.src)}
                     alt={g.photos[photo.key]}
                     fill
-                    sizes="(min-width: 1280px) 300px, (min-width: 768px) 33vw, 50vw"
+                    sizes="(min-width: 1024px) 260px, (min-width: 768px) 30vw, 46vw"
                     className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                   />
-                  <span className="pointer-events-none absolute inset-x-0 bottom-0 hidden items-end justify-between gap-2 bg-gradient-to-t from-[#1f2937]/70 to-transparent px-3.5 pt-10 pb-3 text-left text-[0.92rem] font-bold text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100 md:flex">
+                  <span className="pointer-events-none absolute inset-x-0 bottom-0 hidden items-end justify-between gap-2 bg-gradient-to-t from-[#1f2937]/70 to-transparent px-3 pt-8 pb-2.5 text-left text-[0.85rem] leading-snug font-bold text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100 md:flex">
                     {g.photos[photo.key]}
-                    <Expand className="size-4.5 shrink-0" aria-hidden />
+                    <Expand className="size-4 shrink-0" aria-hidden />
                   </span>
                 </span>
               </button>
             </li>
           ))}
         </ul>
+
+        {gallery.length > 6 && (
+          <div className="mt-5 flex justify-center lg:mt-6">
+            <button
+              type="button"
+              onClick={toggle}
+              aria-expanded={expanded}
+              aria-controls="gallery-grid"
+              className="inline-flex min-h-12 items-center gap-2 rounded-full bg-white px-6 text-[0.95rem] font-extrabold text-sky-deep shadow-soft ring-2 ring-sky transition-colors hover:bg-sky-soft"
+            >
+              <Images className="size-5" aria-hidden />
+              {expanded ? g.showLess : `${g.showAll} (${gallery.length})`}
+            </button>
+          </div>
+        )}
       </div>
 
       {openIndex !== null && <Lightbox index={openIndex} onClose={close} onChange={change} />}

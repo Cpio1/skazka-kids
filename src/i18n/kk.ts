@@ -122,6 +122,8 @@ export const kk: Dictionary = {
     prev: "Алдыңғы сурет",
     next: "Келесі сурет",
     dialogLabel: "Суретті қарау",
+    showAll: "Барлық суреттерді көрсету",
+    showLess: "Жасыру",
     photos: {
       facade: "Балабақша ғимаратының қасбеті",
       playground: "Балалар алаңы",
