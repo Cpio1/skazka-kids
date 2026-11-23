@@ -1,5 +1,6 @@
 "use client";
 
+import { asset } from "@/lib/paths";
 import Image from "next/image";
 import {
   Brain,
@@ -52,7 +53,7 @@ export function About() {
               <div className="absolute top-0 left-0 h-[78%] w-[66%] -rotate-3 rounded-[36px] bg-white p-2 shadow-lift">
                 <div className="relative h-full w-full overflow-hidden rounded-[28px]">
                   <Image
-                    src="/images/gallery/group-room-blue.jpg"
+                    src={asset("/images/gallery/group-room-blue.jpg")}
                     alt={a.photoAlt}
                     fill
                     sizes="(min-width: 1024px) 300px, 60vw"
@@ -63,7 +64,7 @@ export function About() {
               <div className="absolute right-0 bottom-0 h-[56%] w-[60%] rotate-3 rounded-[50%_50%_32px_32px] bg-white p-2 shadow-lift">
                 <div className="relative h-full w-full overflow-hidden rounded-[50%_50%_24px_24px]">
                   <Image
-                    src="/images/gallery/hall-arch.jpg"
+                    src={asset("/images/gallery/hall-arch.jpg")}
                     alt={a.photo2Alt}
                     fill
                     sizes="(min-width: 1024px) 280px, 55vw"

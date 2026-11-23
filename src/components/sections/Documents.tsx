@@ -1,5 +1,6 @@
 "use client";
 
+import { asset } from "@/lib/paths";
 import { Download, ExternalLink, FileText, FileType2, FolderOpen, Link2, MessageCircle, type LucideIcon } from "lucide-react";
 import { documents, type DocumentKind } from "@/data/site";
 import { useLanguage } from "@/i18n/LanguageProvider";
@@ -58,7 +59,7 @@ export function Documents() {
                   </div>
                   <div className="mt-5 flex flex-wrap gap-2">
                     <a
-                      href={doc.href}
+                      href={asset(doc.href)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1.5 rounded-full bg-lavender-deep px-4 py-2 text-sm font-extrabold text-white transition-colors hover:bg-[#523a9c]"
@@ -68,7 +69,7 @@ export function Documents() {
                     </a>
                     {local && (
                       <a
-                        href={doc.href}
+                        href={asset(doc.href)}
                         download
                         className="inline-flex items-center gap-1.5 rounded-full bg-lavender-soft px-4 py-2 text-sm font-extrabold text-lavender-deep ring-1 ring-lavender transition-colors hover:bg-lavender"
                       >

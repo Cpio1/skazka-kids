@@ -1,5 +1,6 @@
 "use client";
 
+import { asset } from "@/lib/paths";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, Expand, X } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -89,7 +90,7 @@ function Lightbox({ index, onClose, onChange }: { index: number; onClose: () => 
         <figure className="relative h-full w-full">
           <Image
             key={photo.src}
-            src={photo.src}
+            src={asset(photo.src)}
             alt={g.photos[photo.key]}
             fill
             sizes="(min-width: 1280px) 1100px, 100vw"
@@ -194,7 +195,7 @@ export function Gallery() {
                   style={{ aspectRatio: `${photo.width} / ${Math.min(photo.height, Math.round((photo.width * 4) / 3))}` }}
                 >
                   <Image
-                    src={photo.src}
+                    src={asset(photo.src)}
                     alt={g.photos[photo.key]}
                     fill
                     sizes="(min-width: 1280px) 300px, (min-width: 768px) 33vw, 50vw"

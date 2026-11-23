@@ -1,5 +1,6 @@
 "use client";
 
+import { asset } from "@/lib/paths";
 import Image from "next/image";
 import { CalendarHeart, Clock, Languages, Phone, Users, Utensils } from "lucide-react";
 import { useLanguage } from "@/i18n/LanguageProvider";
@@ -131,7 +132,7 @@ export function Hero() {
             <div className="absolute inset-x-[9%] top-[7%] bottom-[5%] -rotate-2 rounded-t-[999px] rounded-b-[44px] bg-white p-2.5 shadow-lift sm:p-3">
               <div className="relative h-full w-full overflow-hidden rounded-t-[999px] rounded-b-[36px] bg-sky-soft">
                 <Image
-                  src="/images/gallery/facade.jpg"
+                  src={asset("/images/gallery/facade.jpg")}
                   alt={h.photoAlt}
                   fill
                   priority
@@ -145,7 +146,7 @@ export function Hero() {
             <div className="absolute -bottom-2 -left-2 z-10 size-[38%] rotate-3 rounded-full bg-white p-1.5 shadow-lift sm:-left-6 sm:p-2">
               <div className="relative h-full w-full overflow-hidden rounded-full">
                 <Image
-                  src="/images/gallery/playground.jpg"
+                  src={asset("/images/gallery/playground.jpg")}
                   alt={h.photo2Alt}
                   fill
                   sizes="(min-width: 1024px) 180px, 130px"

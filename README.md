@@ -17,7 +17,7 @@ npm run dev        # http://localhost:3000
 npm run lint
 npm run typecheck
 npm run build
-npm run start      # запуск собранной версии
+npm run preview    # просмотр собранной версии (out/) как на GitHub Pages
 ```
 
 ## Структура
@@ -61,10 +61,21 @@ public/
 - **2GIS.** Дом 24/61 и сам сад в 2GIS пока не найдены, поэтому кнопка открывает улицу Будённого. Когда сад появится в 2GIS, замените `twoGis` в `site.ts` на ссылку его карточки.
 - **Instagram** намеренно не добавлен.
 
-## Публикация (позже)
+## Публикация на GitHub Pages
 
-Репозиторий пока не создан. Для публикации:
+Сайт: **https://cpio1.github.io/skazka-kids/**
 
-1. `git init`, первый коммит, создать репозиторий на GitHub и выполнить `git push`.
-2. **Vercel (рекомендуется):** импортировать репозиторий — настройки по умолчанию подходят, `next/image` оптимизирует фото автоматически.
-3. После подключения домена задать переменную окружения `NEXT_PUBLIC_SITE_URL=https://ваш-домен` — она нужна для корректных Open Graph-ссылок.
+Публикация автоматическая — `.github/workflows/deploy.yml`:
+
+- запускается при каждом `git push` в ветку `main` и вручную (Actions → Deploy to GitHub Pages → Run workflow);
+- выполняет `npm ci` и `npm run build` (статический экспорт в папку `out/`) и публикует `out/` в GitHub Pages.
+
+В настройках репозитория: Settings → Pages → Source: **GitHub Actions**.
+
+Как это устроено:
+
+- `next.config.ts`: `output: "export"`, `basePath: "/skazka-kids"` (только при сборке; `npm run dev` работает в корне), `images.unoptimized: true`, `trailingSlash: true`.
+- Пути к файлам из `public/` в `next/image` и ссылках на документы оборачиваются в `asset()` из `src/lib/paths.ts` — он добавляет basePath.
+- `npm run preview` — просмотр собранной папки `out/` по адресу http://localhost:4173/skazka-kids/, как на GitHub Pages.
+
+Собственный домен: в workflow задать `BASE_PATH: ""` и `SITE_URL: https://ваш-домен`, добавить домен в Settings → Pages.
